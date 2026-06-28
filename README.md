@@ -7,8 +7,8 @@ By using a wiringPi shim, the container is not dependend on a Raspberry Pi hardw
 
 ```
 docker run \
-  --name lcnpchk
   --device=/dev/ttyUSB0 \
+  --name lcnpchk \
   --publish 4114:4114 \
   --publish 4220:4220 \
   ghcr.io/paresy/lcn-pchk-docker:arm64
@@ -28,7 +28,7 @@ You can also use your own **lcnpchk.xml** if you already have one. Just bind the
 
 ```
 docker run \
-  --name lcnpchk
+  --name lcnpchk \
   --device=/dev/ttyUSB0 \
   --publish 4114:4114 \
   --publish 4220:4220 \
