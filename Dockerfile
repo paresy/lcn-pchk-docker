@@ -8,6 +8,10 @@ EXPOSE 4220
 
 WORKDIR /home
 
+# We need to set the licensee and licensekey on every start as lcnpchk encrypts it on each start
+ENV LICENSEE=""
+ENV LICENSEKEY=""
+
 # We need armhf libraries to run the lcnpchk binary, as it is compiled for the armhf architecture
 RUN dpkg --add-architecture armhf
 
@@ -16,6 +20,7 @@ RUN apt update &&\
     apt install -y \
       wget \
       procps \
+      xmlstarlet \
       libc6:armhf \
       libstdc++6:armhf \
       libcrypt1:armhf
@@ -37,10 +42,17 @@ RUN apt install -y gcc-arm-linux-gnueabihf libc6-dev-armhf-cross &&\
 # Download PCHK from the official website and extract it
 RUN cd /home/ &&\
     wget -O lcnpchk.tar.gz https://www.lcn.eu/en/?wpdmdl=8088 &&\
-    tar xzf lcnpchk.tar.gz
+    tar xzf lcnpchk.tar.gz &&\
+    rm lcnpchk.tar.gz
 
+# Initially we want to change the Windows default fron COM1 to ttyUSB0, as this is the default on Linux systems
+RUN xmlstarlet ed -L \
+      -u "/LcnPchkConfiguration/Communication/LCNPort" \
+      -v "ttyUSB0" \
+      lcnpchk.xml
+
+# We need to add an entrypoint script that will start the lcnpchk service and set the licensee and licensekey
 ADD entrypoint.sh /home/entrypoint.sh
-
 RUN chmod +x /home/entrypoint.sh
 
 # Run our entrypoint script that will start the lcnpchk service

@@ -3,7 +3,7 @@
 This repo focuses on creating an ARM64 (aarch64) compatible container that can be run side by side with Symcon.
 By using a wiringPi shim, the container is not dependend on a Raspberry Pi hardware platform.
 
-## Usage (Simple)
+## Usage
 
 ```
 docker run \
@@ -11,32 +11,23 @@ docker run \
   --name lcnpchk \
   --publish 4114:4114 \
   --publish 4220:4220 \
+  --env LICENSEE='paresy' \
+  --env LICENSEKEY='xxxxx-xxxxx-xxxxx-xxxxx-xxxxx-xxx' \
   ghcr.io/paresy/lcn-pchk-docker:arm64
 ```
 
-Use the Windows PCHK Monitor:
+Use the Windows PCHK Monitor if you need to change the configuration:
 - Connect using "Computer in Network"
-- Set the license (You need to buy one, if you have none!)
-- Set the Port to **ttyUSB0**
+- Change the Port if it is not **ttyUSB0**
+- Change the default username/password as outlined below
 
 **Username:** lcn  
 **Password:** test123
 
-## Usage (Advanced)
-
-You can also use your own **lcnpchk.xml** if you already have one. Just bind the path directly into the container. In this example we assume the lcnpchk.xml is in the same path as you run the docker run command.
-
-```
-docker run \
-  --name lcnpchk \
-  --device=/dev/ttyUSB0 \
-  --publish 4114:4114 \
-  --publish 4220:4220 \
-  --volume $(pwd)/lcnpchk.xml:/home/lcnpchk.xml \
-  ghcr.io/paresy/lcn-pchk-docker:arm64
-```
+_Hint: Setting the license through the PCHK Monitor is not supported!_
 
 ## Running on a Raspberry Pi 5
+
 When using a Raspberry Pi 5 the Raspberry Pi OS uses a 16k PageSize instead of the default 4k PageSize. LCHK is not compatible with a 16k PageSize. Luckily we can revert Raspberry Pi OS in using a 4k PageSize even on the Raspberry Pi 5. Ask your favorite AI how to accomplish this.
 
 ## Debugging
