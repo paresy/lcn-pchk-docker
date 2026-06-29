@@ -56,6 +56,12 @@ RUN xmlstarlet ed -L \
       -v "ttyUSB0" \
       lcnpchk.xml
 
+# We want to keep our defaults the same as in our README. lcn/lcn as username/password.
+RUN xmlstarlet ed -L \
+      -u "/LcnPchkConfiguration/Communication/User" \
+      -v "lcn:b94fe9e10aa17f2638623de3fb6c573e" \
+      lcnpchk.xml
+
 # We need to add an entrypoint script that will start the lcnpchk service and set the licensee and licensekey
 ADD entrypoint.sh /home/entrypoint.sh
 RUN chmod +x /home/entrypoint.sh

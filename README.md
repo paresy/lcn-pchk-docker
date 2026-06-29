@@ -27,7 +27,7 @@ docker run \
 * **UPGRADEKEY** is optional and can be left out or empty if not available
 * **USERNAME** and **PASSWORD** are optional. When either one is not set, this is the default:
   * **Username:** lcn  
-  * **Password:** test123
+  * **Password:** lcn
 * Use the Windows PCHK Monitor if you need to change any other configuration option.
   * Connect using "Computer in Network"
 
