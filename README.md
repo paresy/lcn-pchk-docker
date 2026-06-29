@@ -13,7 +13,7 @@ docker run \
   --device=/dev/ttyUSB0 \
   --env LICENSEE='paresy' \
   --env LICENSEKEY='xxxxx-xxxxx-xxxxx-xxxxx-xxxxx-xxx' \
-  --env UPGRADEKEY='xxxxx-xxxxx-xxxxx-xxxxx-xxxxx-xxx'
+  --env UPGRADEKEY='xxxxx-xxxxx-xxxxx-xxxxx-xxxxx-xxx' \
   --env USERNAME='lcn' \
   --env PASSWORD='lcn' \
   ghcr.io/paresy/lcn-pchk-docker:arm64
