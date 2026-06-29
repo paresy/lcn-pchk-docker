@@ -8,9 +8,14 @@ EXPOSE 4220
 
 WORKDIR /home
 
-# We need to set the licensee and licensekey on every start as lcnpchk encrypts it on each start
+# We need to set the licensee/licensekey/upgradekey on every start as lcnpchk encrypts it on each start
 ENV LICENSEE=""
 ENV LICENSEKEY=""
+ENV UPGRADEKEY=""
+
+# Make username/password configurable via environment variables
+ENV USERNAME=""
+ENV PASSWORD=""
 
 # We need armhf libraries to run the lcnpchk binary, as it is compiled for the armhf architecture
 RUN dpkg --add-architecture armhf
