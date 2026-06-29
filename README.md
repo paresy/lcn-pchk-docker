@@ -7,24 +7,29 @@ By using a wiringPi shim, the container is not dependend on a Raspberry Pi hardw
 
 ```
 docker run \
-  --device=/dev/ttyUSB0 \
   --name lcnpchk \
   --publish 4114:4114 \
   --publish 4220:4220 \
+  --device=/dev/ttyUSB0 \
   --env LICENSEE='paresy' \
   --env LICENSEKEY='xxxxx-xxxxx-xxxxx-xxxxx-xxxxx-xxx' \
+  --env UPGRADEKEY='xxxxx-xxxxx-xxxxx-xxxxx-xxxxx-xxx'
+  --env USERNAME='lcn' \
+  --env PASSWORD='lcn' \
   ghcr.io/paresy/lcn-pchk-docker:arm64
 ```
 
-Use the Windows PCHK Monitor if you need to change the configuration:
-- Connect using "Computer in Network"
-- Change the Port if it is not **ttyUSB0**
-- Change the default username/password as outlined below
+### Further Hints
 
-**Username:** lcn  
-**Password:** test123
-
-_Hint: Setting the license through the PCHK Monitor is not supported!_
+* **LICENSEE** and **LICENSEKEY** are mandatory. Setting the license through the PCHK Monitor is not supported!
+* If your device is not /dev/ttyUSB but /dev/ttyUSB5, you need to properly map it e.g.
+  * **--device=/dev/ttyUSB5:/dev/ttyUSB0**
+* **UPGRADEKEY** is optional and can be left out or empty if not available
+* **USERNAME** and **PASSWORD** are optional. When either one is not set, this is the default:
+  * **Username:** lcn  
+  * **Password:** test123
+* Use the Windows PCHK Monitor if you need to change any other configuration option.
+  * Connect using "Computer in Network"
 
 ## Running on a Raspberry Pi 5
 

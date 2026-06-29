@@ -6,7 +6,6 @@ set -e
 # Escape XML special characters. 
 # For the license key only & to &amp; is relevant
 # And we need to remove all - which the AutoKey feature requires
-LICENSEE_ESCAPED="${LICENSEE//&/&amp;}"
 LICENSEKEY_CLEAN="${LICENSEKEY//-/}"
 LICENSEKEY_ESCAPED="${LICENSEKEY_CLEAN//&/&amp;}"
 
@@ -22,16 +21,44 @@ fi
 # PCHK converts the LicenseKey (AutoKey) to a ProductKey on first start and saves it in the lcnpchk.xml file.
 # But it is somehow locked to the machine and after each reboot will it be invalid. So we need to set the LicenseKey
 # on each start, and let PCHK convert it to a ProductKey during startup to keep it happy and valid.
+
+if ([ -z "$LICENSEE" ] || [ -z "$LICENSEKEY" ]); then
+    echo "Error: LICENSEE or LICENSEKEY is not set. PCHK will not be licensed and will not work properly."
+    exit 1
+fi
+
 xmlstarlet ed -L \
   -u "/LcnPchkConfiguration/LicenseInformation/Licensee" \
-  -v "$LICENSEE_ESCAPED" \
+  -v "$LICENSEE" \
   lcnpchk.xml
 
 xmlstarlet ed -L \
   -d "/LcnPchkConfiguration/LicenseInformation/LicenseKeys/LicenseKey" \
-  -s "/LcnPchkConfiguration/LicenseInformation/LicenseKeys" -t elem -n "LicenseKey" -v "$LICENSEKEY_ESCAPED" \
-  -i "/LcnPchkConfiguration/LicenseInformation/LicenseKeys/LicenseKey" -t attr -n "xsi:type" -v "AutoKey" \
   lcnpchk.xml
+
+xmlstarlet ed -L \
+  -s "/LcnPchkConfiguration/LicenseInformation/LicenseKeys" -t elem -n "LicenseKey" -v "$LICENSEKEY_ESCAPED" \
+  -i "/LcnPchkConfiguration/LicenseInformation/LicenseKeys/LicenseKey[last()]" -t attr -n "xsi:type" -v "AutoKey" \
+  lcnpchk.xml
+
+# Set an UpgradeKey if available. This is optional to e.g. get more usable channels
+if [ -n "$UPGRADEKEY" ]; then
+    UPGRADEKEY_CLEAN="${UPGRADEKEY//-/}"
+    UPGRADEKEY_ESCAPED="${UPGRADEKEY_CLEAN//&/&amp;}"
+    xmlstarlet ed -L \
+      -s "/LcnPchkConfiguration/LicenseInformation/LicenseKeys" -t elem -n "LicenseKey" -v "$UPGRADEKEY_ESCAPED" \
+      -i "/LcnPchkConfiguration/LicenseInformation/LicenseKeys/LicenseKey[last()]" -t attr -n "xsi:type" -v "AutoKey" \
+      lcnpchk.xml
+fi
+
+# Set username / password if provided via environment variables
+if [ -n "$USERNAME" ] && [ -n "$PASSWORD" ]; then
+    PASSWORD_MD5=$(printf '%s' "$PASSWORD" | md5sum | awk '{print $1}')
+    xmlstarlet ed -L \
+      -u "/LcnPchkConfiguration/Communication/User" \
+      -v "$USERNAME:$PASSWORD_MD5" \
+      lcnpchk.xml
+fi
 
 # PCHK will check all available FDs (Verfied via strace -f ./lcnpchk)
 # Limit the number to keep the startup time reasonable. 
