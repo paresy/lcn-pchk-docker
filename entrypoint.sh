@@ -60,6 +60,14 @@ if [ -n "$USERNAME" ] && [ -n "$PASSWORD" ]; then
       lcnpchk.xml
 fi
 
+# Set host id if provided via environment variables
+if [ -n "$HOSTID" ]; then
+    xmlstarlet ed -L \
+      -u "/LcnPchkConfiguration/Communication/HostId" \
+      -v "$HOSTID" \
+      lcnpchk.xml
+fi
+
 # PCHK will check all available FDs (Verfied via strace -f ./lcnpchk)
 # Limit the number to keep the startup time reasonable. 
 ulimit -n 10000

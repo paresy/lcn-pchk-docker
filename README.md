@@ -16,6 +16,7 @@ docker run \
   --env UPGRADEKEY='xxxxx-xxxxx-xxxxx-xxxxx-xxxxx-xxx' \
   --env USERNAME='lcn' \
   --env PASSWORD='lcn' \
+  --env HOSTID='4' \
   ghcr.io/paresy/lcn-pchk-docker:arm64
 ```
 
@@ -28,6 +29,7 @@ docker run \
 * **USERNAME** and **PASSWORD** are optional. When either one is not set, this is the default:
   * **Username:** lcn  
   * **Password:** lcn
+* **HOSTID** is optional and can be left out or empty. The default value is _4_.
 * Use the Windows PCHK Monitor if you need to change any other configuration option.
   * Connect using "Computer in Network"
 

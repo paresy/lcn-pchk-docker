@@ -17,6 +17,9 @@ ENV UPGRADEKEY=""
 ENV USERNAME=""
 ENV PASSWORD=""
 
+# Allow changing the HostId via environment variable
+ENV HOSTID=""
+
 # We need armhf libraries to run the lcnpchk binary, as it is compiled for the armhf architecture
 RUN dpkg --add-architecture armhf
 
