@@ -22,7 +22,7 @@ docker run \
 ### Further Hints
 
 * **LICENSEE** and **LICENSEKEY** are mandatory. Setting the license through the PCHK Monitor is not supported!
-* If your device is not /dev/ttyUSB but /dev/ttyUSB5, you need to properly map it e.g.
+* If your device is not /dev/ttyUSB0 but /dev/ttyUSB5, you need to properly map it e.g.
   * **--device=/dev/ttyUSB5:/dev/ttyUSB0**
 * **UPGRADEKEY** is optional and can be left out or empty if not available
 * **USERNAME** and **PASSWORD** are optional. When either one is not set, this is the default:
